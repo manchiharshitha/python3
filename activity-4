@@ -1,0 +1,99 @@
+
+# EMPLOYEE PAYROLL AND DEDUCTION ANALYSIS
+
+employees = []
+
+n = int(input("Enter number of employees: "))
+
+for i in range(n):
+
+    print("\nEnter details of Employee", i + 1)
+
+    name = input("Enter employee name: ")
+    emp_id = input("Enter employee ID: ")
+
+    basic = float(input("Enter basic salary: "))
+    hra = float(input("Enter house rent allowance: "))
+    da = float(input("Enter dearness allowance: "))
+    overtime_hours = float(input("Enter overtime hours: "))
+    overtime_rate = float(input("Enter overtime rate per hour: "))
+    incentive = float(input("Enter incentives: "))
+
+    # Validate salary details
+
+    if (basic < 0 or hra < 0 or da < 0 or
+        overtime_hours < 0 or overtime_rate < 0 or incentive < 0):
+
+        print("Invalid salary details!")
+        continue
+
+    # Calculate overtime payment
+
+    overtime_pay = overtime_hours * overtime_rate
+
+    # Calculate gross salary
+
+    gross = basic + hra + da + overtime_pay + incentive
+
+    # Calculate progressive deductions
+
+    if gross <= 20000:
+        deduction = gross * 0.05
+
+    elif gross <= 40000:
+        deduction = (20000 * 0.05) + ((gross - 20000) * 0.10)
+
+    elif gross <= 60000:
+        deduction = (20000 * 0.05) + (20000 * 0.10) + ((gross - 40000) * 0.15)
+
+    else:
+        deduction = (20000 * 0.05) + (20000 * 0.10) + (20000 * 0.15) + ((gross - 60000) * 0.20)
+
+    # Calculate net salary
+
+    net_salary = gross - deduction
+
+    # Store employee details
+
+    employees.append([
+        name, emp_id, basic, hra, da,
+        overtime_pay, incentive, gross,
+        deduction, net_salary
+    ])
+
+    # Display salary statement
+
+    print("\n========== SALARY STATEMENT ==========")
+
+    print("Employee Name:", name)
+    print("Employee ID:", emp_id)
+    print("Basic Salary: Rs.", basic)
+    print("House Rent Allowance: Rs.", hra)
+    print("Dearness Allowance: Rs.", da)
+    print("Overtime Payment: Rs.", overtime_pay)
+    print("Incentives: Rs.", incentive)
+
+    print("--------------------------------------")
+    print("Gross Salary: Rs.", round(gross, 2))
+    print("Total Deduction: Rs.", round(deduction, 2))
+    print("Net Salary: Rs.", round(net_salary, 2))
+    print("======================================")
+
+
+# Display all employee salary summaries
+
+print("\n========== EMPLOYEE PAYROLL SUMMARY ==========")
+
+if len(employees) == 0:
+    print("No valid employee records found.")
+
+else:
+    for employee in employees:
+
+        print("\nEmployee Name:", employee[0])
+        print("Employee ID:", employee[1])
+        print("Gross Salary: Rs.", round(employee[7], 2))
+        print("Deduction: Rs.", round(employee[8], 2))
+        print("Net Salary: Rs.", round(employee[9], 2))
+
+print("\nPayroll Calculation Completed!")
