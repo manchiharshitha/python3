@@ -1,0 +1,145 @@
+
+# EXAMINATION RESULT AND GRACE-MARK VALIDATION
+
+students = []
+
+n = int(input("Enter number of students: "))
+
+subjects = ("English", "Mathematics", "Physics",
+            "Chemistry", "Computer Science")
+
+max_marks = 100
+pass_marks = 35
+grace_limit = 5
+
+for i in range(n):
+
+    print("\nEnter Details of Student", i + 1)
+
+    name = input("Enter student name: ")
+
+    marks_list = []
+    final_marks = []
+    total = 0
+    grace_used = 0
+    failed_subjects = 0
+
+    # Enter subject-wise marks
+
+    for subject in subjects:
+
+        marks = int(input("Enter " + subject + " marks: "))
+
+        # Validate marks
+
+        if marks < 0 or marks > max_marks:
+
+            print("Invalid marks! Enter marks between 0 and 100.")
+            marks = -1
+
+        marks_list.append(marks)
+
+    # Check whether marks are valid
+
+    valid = True
+
+    for marks in marks_list:
+
+        if marks == -1:
+            valid = False
+
+    if valid == False:
+        print("Invalid student marks. Record skipped.")
+        continue
+
+    # Apply grace marks
+
+    for j in range(len(subjects)):
+
+        marks = marks_list[j]
+
+        if marks < pass_marks:
+
+            required = pass_marks - marks
+
+            if required <= grace_limit - grace_used:
+
+                marks = marks + required
+                grace_used = grace_used + required
+
+            else:
+                failed_subjects = failed_subjects + 1
+
+        final_marks.append(marks)
+        total = total + marks
+
+    # Calculate percentage
+
+    percentage = total / len(subjects)
+
+    # Final result classification
+
+    if failed_subjects == 0:
+
+        if percentage >= 75:
+            result = "Distinction"
+
+        elif percentage >= 60:
+            result = "First Class"
+
+        elif percentage >= 50:
+            result = "Second Class"
+
+        else:
+            result = "Pass"
+
+    else:
+        result = "Fail"
+
+    # Store student details
+
+    students.append([
+        name, marks_list, final_marks,
+        total, percentage, grace_used, result
+    ])
+
+    # Display individual result
+
+    print("\n========== EXAMINATION RESULT ==========")
+
+    print("Student Name:", name)
+
+    for j in range(len(subjects)):
+
+        print(subjects[j], ":",
+              marks_list[j],
+              "Final Marks:", final_marks[j])
+
+    print("Total Marks:", total, "/", len(subjects) * 100)
+
+    print("Percentage:", round(percentage, 2), "%")
+
+    print("Grace Marks Used:", grace_used)
+
+    print("Final Classification:", result)
+
+
+# Display final result summary
+
+print("\n========== FINAL RESULT SUMMARY ==========")
+
+if len(students) == 0:
+
+    print("No valid student records found.")
+
+else:
+
+    for student in students:
+
+        print("\nStudent Name:", student[0])
+        print("Total Marks:", student[3])
+        print("Percentage:", round(student[4], 2), "%")
+        print("Grace Marks:", student[5])
+        print("Result:", student[6])
+
+print("\nExamination Result Processing Completed!")
