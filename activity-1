@@ -1,0 +1,82 @@
+
+# UNIVERSITY SCHOLARSHIP ALLOCATION SYSTEM
+
+applicants = []
+
+n = int(input("Enter number of applicants: "))
+
+for i in range(n):
+    print("\nEnter details of Applicant", i + 1)
+
+    name = input("Enter student name: ")
+
+    maths = int(input("Enter Mathematics marks: "))
+    physics = int(input("Enter Physics marks: "))
+    chemistry = int(input("Enter Chemistry marks: "))
+
+    attendance = float(input("Enter attendance percentage: "))
+    income = float(input("Enter annual family income: "))
+
+    total = maths + physics + chemistry
+    aggregate = total / 3
+
+    if (maths >= 40 and physics >= 40 and chemistry >= 40
+        and aggregate >= 75
+        and attendance >= 85
+        and income <= 250000):
+
+        status = "Eligible"
+    else:
+        status = "Not Eligible"
+
+    applicants.append([
+        name, aggregate, attendance, income, total, status
+    ])
+
+eligible = []
+
+for student in applicants:
+    if student[5] == "Eligible":
+        eligible.append(student)
+
+# Ranking students
+
+for i in range(len(eligible)):
+    for j in range(i + 1, len(eligible)):
+
+        if (eligible[i][1] < eligible[j][1] or
+           (eligible[i][1] == eligible[j][1] and
+            eligible[i][2] < eligible[j][2]) or
+           (eligible[i][1] == eligible[j][1] and
+            eligible[i][2] == eligible[j][2] and
+            eligible[i][3] > eligible[j][3])):
+
+            eligible[i], eligible[j] = eligible[j], eligible[i]
+
+print("\n===== SCHOLARSHIP RESULTS =====")
+
+for student in applicants:
+    print("\nName:", student[0])
+    print("Aggregate:", round(student[1], 2))
+    print("Attendance:", student[2])
+    print("Income:", student[3])
+    print("Status:", student[5])
+
+print("\n===== FINAL SCHOLARSHIP RANKING =====")
+
+if len(eligible) == 0:
+    print("No eligible applicants found.")
+
+else:
+    rank = 1
+
+    for student in eligible:
+        print("\nRank:", rank)
+        print("Student Name:", student[0])
+        print("Aggregate Marks:", round(student[1], 2))
+        print("Attendance:", student[2])
+        print("Family Income:", student[3])
+
+        rank = rank + 1
+
+print("\nScholarship Allocation Completed!")
