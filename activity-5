@@ -1,0 +1,129 @@
+
+# MULTI-PLAN TELECOMMUNICATIONS COST OPTIMIZATION
+
+plans = []
+
+n = int(input("Enter number of mobile plans: "))
+
+# Get customer usage details
+
+print("\nEnter Customer Usage Details")
+
+calls = float(input("Enter monthly calling minutes: "))
+data = float(input("Enter monthly data usage in GB: "))
+sms = int(input("Enter monthly SMS usage: "))
+validity = int(input("Enter required plan validity in days: "))
+budget = float(input("Enter your budget: "))
+
+# Validate customer details
+
+if calls < 0 or data < 0 or sms < 0 or validity <= 0 or budget < 0:
+
+    print("Invalid customer details!")
+
+else:
+
+    for i in range(n):
+
+        print("\nEnter Details of Plan", i + 1)
+
+        name = input("Enter plan name: ")
+        price = float(input("Enter plan price: "))
+        plan_calls = float(input("Enter free calling minutes: "))
+        plan_data = float(input("Enter free data in GB: "))
+        plan_sms = int(input("Enter free SMS: "))
+        plan_validity = int(input("Enter validity in days: "))
+
+        call_rate = float(input("Enter extra calling charge per minute: "))
+        data_rate = float(input("Enter extra data charge per GB: "))
+        sms_rate = float(input("Enter extra SMS charge: "))
+
+        # Validate plan details
+
+        if (price < 0 or plan_calls < 0 or plan_data < 0
+            or plan_sms < 0 or plan_validity <= 0
+            or call_rate < 0 or data_rate < 0 or sms_rate < 0):
+
+            print("Invalid plan details!")
+            continue
+
+        # Calculate excess usage charges
+
+        if calls > plan_calls:
+            extra_calls = calls - plan_calls
+        else:
+            extra_calls = 0
+
+        if data > plan_data:
+            extra_data = data - plan_data
+        else:
+            extra_data = 0
+
+        if sms > plan_sms:
+            extra_sms = sms - plan_sms
+        else:
+            extra_sms = 0
+
+        call_charge = extra_calls * call_rate
+        data_charge = extra_data * data_rate
+        sms_charge = extra_sms * sms_rate
+
+        total_cost = price + call_charge + data_charge + sms_charge
+
+        # Check plan eligibility
+
+        if plan_validity >= validity and total_cost <= budget:
+            status = "Eligible"
+        else:
+            status = "Not Eligible"
+
+        # Store plan details
+
+        plans.append([
+            name, price, call_charge, data_charge,
+            sms_charge, total_cost, plan_validity, status
+        ])
+
+    # Display all plan details
+
+    print("\n========== MOBILE PLAN COMPARISON ==========")
+
+    for plan in plans:
+
+        print("\nPlan Name:", plan[0])
+        print("Base Price: Rs.", plan[1])
+        print("Extra Call Charges: Rs.", plan[2])
+        print("Extra Data Charges: Rs.", plan[3])
+        print("Extra SMS Charges: Rs.", plan[4])
+        print("Total Cost: Rs.", round(plan[5], 2))
+        print("Validity:", plan[6], "days")
+        print("Status:", plan[7])
+
+    # Find the most economical eligible plan
+
+    best_plan = ()
+    minimum_cost = float("inf")
+
+    for plan in plans:
+
+        if plan[7] == "Eligible":
+
+            if plan[5] < minimum_cost:
+
+                minimum_cost = plan[5]
+                best_plan = plan
+
+    # Display the best plan
+
+    print("\n========== BEST MOBILE PLAN ==========")
+
+    if best_plan == ():
+        print("No eligible mobile plan found.")
+
+    else:
+        print("Most Economical Plan:", best_plan[0])
+        print("Total Cost: Rs.", round(best_plan[5], 2))
+        print("Validity:", best_plan[6], "days")
+        print("You can choose this plan to save money.")
+
+print("\nTelecommunications Cost Analysis Completed!")
