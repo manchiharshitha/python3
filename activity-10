@@ -1,0 +1,110 @@
+# Student Timetable Conflict Detection
+
+# Course schedule format:
+# (Course Name, Day, Start Time, End Time, Room)
+
+timetable = [
+    ("Python", "Monday", "09:00", "10:00", "Room A"),
+    ("Maths", "Monday", "10:00", "11:00", "Room B"),
+    ("Physics", "Monday", "09:30", "10:30", "Room C"),
+    ("English", "Tuesday", "09:00", "10:00", "Room A")
+]
+
+# Convert time string into minutes
+def convert_time(time):
+    hours, minutes = time.split(":")
+    return int(hours) * 60 + int(minutes)
+
+
+# Check overlapping schedules
+def check_conflicts(schedule):
+    conflicts = []
+
+    for i in range(len(schedule)):
+        for j in range(i + 1, len(schedule)):
+
+            course1 = schedule[i]
+            course2 = schedule[j]
+
+            if course1[1] == course2[1]:
+
+                start1 = convert_time(course1[2])
+                end1 = convert_time(course1[3])
+
+                start2 = convert_time(course2[2])
+                end2 = convert_time(course2[3])
+
+                if start1 < end2 and start2 < end1:
+                    conflicts.append((course1[0], course2[0]))
+
+    return conflicts
+
+
+# Check room availability
+def check_rooms(schedule):
+    conflicts = []
+
+    for i in range(len(schedule)):
+        for j in range(i + 1, len(schedule)):
+
+            course1 = schedule[i]
+            course2 = schedule[j]
+
+            if (course1[1] == course2[1] and
+                course1[4] == course2[4]):
+
+                start1 = convert_time(course1[2])
+                end1 = convert_time(course1[3])
+
+                start2 = convert_time(course2[2])
+                end2 = convert_time(course2[3])
+
+                if start1 < end2 and start2 < end1:
+                    conflicts.append(
+                        (course1[0], course2[0], course1[4])
+                    )
+
+    return conflicts
+
+
+# Validate proposed timetable
+def validate_timetable(schedule):
+
+    valid = True
+
+    for course in schedule:
+
+        if (convert_time(course[2]) >=
+            convert_time(course[3])):
+            print("Invalid time for:", course[0])
+            valid = False
+
+    conflicts = check_conflicts(schedule)
+    rooms = check_rooms(schedule)
+
+    if conflicts:
+        print("\nTimetable Overlapping Conflicts:")
+        for conflict in conflicts:
+            print(conflict[0], "and", conflict[1])
+        valid = False
+
+    if rooms:
+        print("\nRoom Unavailability:")
+        for room in rooms:
+            print(room[0], "and", room[1],
+                  "cannot use", room[2], "at the same time")
+        valid = False
+
+    if valid:
+        print("\nTimetable is Valid!")
+    else:
+        print("\nTimetable is Invalid!")
+
+
+# Display timetable
+print("STUDENT TIMETABLE")
+
+for course in timetable:
+    print(course)
+
+validate_timetable(timetable)
