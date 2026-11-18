@@ -1,0 +1,93 @@
+
+# HOSPITAL BILLING AND PATIENT CLASSIFICATION SYSTEM
+
+patients = []
+
+n = int(input("Enter number of patients: "))
+
+for i in range(n):
+
+    print("\nEnter details of Patient", i + 1)
+
+    name = input("Enter patient name: ")
+    age = int(input("Enter patient age: "))
+
+    consultation = float(input("Enter consultation charges: "))
+    diagnostic = float(input("Enter diagnostic charges: "))
+    treatment = float(input("Enter treatment charges: "))
+
+    # Validate billing constraints
+
+    if (age <= 0 or consultation < 0 or
+        diagnostic < 0 or treatment < 0):
+
+        print("Invalid patient details or billing amount.")
+        continue
+
+    # Calculate total charges
+
+    total = consultation + diagnostic + treatment
+
+    # Apply concessions
+
+    if age >= 60:
+        concession = total * 0.20
+
+    elif total >= 10000:
+        concession = total * 0.10
+
+    else:
+        concession = 0
+
+    final_bill = total - concession
+
+    # Patient classification according to payment policy
+
+    if final_bill <= 5000:
+        category = "Low Payment"
+
+    elif final_bill <= 15000:
+        category = "Medium Payment"
+
+    else:
+        category = "High Payment"
+
+    # Store patient details
+
+    patients.append([
+        name, age, consultation, diagnostic,
+        treatment, total, concession,
+        final_bill, category
+    ])
+
+    # Display patient bill
+
+    print("\n========== HOSPITAL BILL ==========")
+
+    print("Patient Name:", name)
+    print("Age:", age)
+    print("Consultation Charges:", consultation)
+    print("Diagnostic Charges:", diagnostic)
+    print("Treatment Charges:", treatment)
+
+    print("Total Charges:", round(total, 2))
+    print("Concession:", round(concession, 2))
+    print("Final Bill: Rs.", round(final_bill, 2))
+    print("Patient Category:", category)
+
+
+# Display all patient records
+
+print("\n========== PATIENT BILL SUMMARY ==========")
+
+if len(patients) == 0:
+    print("No valid patient records found.")
+
+else:
+    for patient in patients:
+
+        print("\nPatient Name:", patient[0])
+        print("Final Bill: Rs.", round(patient[7], 2))
+        print("Classification:", patient[8])
+
+print("\nHospital Billing Completed!")
