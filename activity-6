@@ -1,0 +1,142 @@
+
+# RAILWAY FARE AND RESERVATION CALCULATOR
+
+passengers = []
+
+n = int(input("Enter number of passengers: "))
+
+for i in range(n):
+
+    print("\nEnter Details of Passenger", i + 1)
+
+    name = input("Enter passenger name: ")
+    age = int(input("Enter passenger age: "))
+    distance = float(input("Enter travel distance in KM: "))
+
+    print("\nSelect Travel Class")
+    print("1. Sleeper")
+    print("2. AC 3 Tier")
+    print("3. AC 2 Tier")
+    print("4. AC First Class")
+
+    choice = int(input("Enter class choice: "))
+
+    # Select fare per kilometre
+
+    if choice == 1:
+        travel_class = "Sleeper"
+        rate = 1.5
+
+    elif choice == 2:
+        travel_class = "AC 3 Tier"
+        rate = 2.5
+
+    elif choice == 3:
+        travel_class = "AC 2 Tier"
+        rate = 3.5
+
+    elif choice == 4:
+        travel_class = "AC First Class"
+        rate = 5.0
+
+    else:
+        print("Invalid class selection!")
+        continue
+
+    # Validate passenger details
+
+    if age <= 0 or distance <= 0:
+        print("Invalid passenger details!")
+        continue
+
+    # Calculate distance-based fare slabs
+
+    if distance <= 100:
+        base_fare = distance * rate
+
+    elif distance <= 500:
+        base_fare = (100 * rate) + ((distance - 100) * rate * 0.90)
+
+    else:
+        base_fare = (100 * rate) + (400 * rate * 0.90) + ((distance - 500) * rate * 0.80)
+
+    # Age-based concession
+
+    if age < 5:
+        concession = base_fare
+    elif age >= 60:
+        concession = base_fare * 0.40
+    else:
+        concession = 0
+
+    fare_after_concession = base_fare - concession
+
+    # Reservation fee
+
+    reservation_fee = 50
+
+    # Calculate total fare
+
+    total_fare = fare_after_concession + reservation_fee
+
+    # Cancellation penalty
+
+    print("\nDo you want to cancel the ticket?")
+    cancel = input("Enter yes or no: ").lower()
+
+    if cancel == "yes":
+        cancellation_penalty = total_fare * 0.25
+        refund = total_fare - cancellation_penalty
+        status = "Cancelled"
+
+    else:
+        cancellation_penalty = 0
+        refund = 0
+        status = "Confirmed"
+
+    # Store passenger details
+
+    passengers.append([
+        name, age, travel_class, distance,
+        base_fare, concession, reservation_fee,
+        total_fare, cancellation_penalty,
+        refund, status
+    ])
+
+    # Display ticket details
+
+    print("\n========== RAILWAY TICKET ==========")
+
+    print("Passenger Name:", name)
+    print("Age:", age)
+    print("Travel Class:", travel_class)
+    print("Distance:", distance, "KM")
+    print("Base Fare: Rs.", round(base_fare, 2))
+    print("Age Concession: Rs.", round(concession, 2))
+    print("Reservation Fee: Rs.", reservation_fee)
+    print("Total Fare: Rs.", round(total_fare, 2))
+    print("Cancellation Penalty: Rs.",
+          round(cancellation_penalty, 2))
+
+    if status == "Cancelled":
+        print("Refund Amount: Rs.", round(refund, 2))
+
+    print("Ticket Status:", status)
+
+
+# Display passenger summary
+
+print("\n========== PASSENGER SUMMARY ==========")
+
+if len(passengers) == 0:
+    print("No valid passenger records found.")
+
+else:
+    for passenger in passengers:
+
+        print("\nPassenger:", passenger[0])
+        print("Travel Class:", passenger[2])
+        print("Total Fare: Rs.", round(passenger[7], 2))
+        print("Ticket Status:", passenger[10])
+
+print("\nRailway Fare Calculation Completed!")
